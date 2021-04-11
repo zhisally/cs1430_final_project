@@ -11,7 +11,7 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('f2.png')
+    image = cv2.imread('f1.png')
     # print(image)
     original = image.copy()
 
@@ -21,7 +21,7 @@ def main():
 
     print(type(image[0, 0]))
 
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     cv2.imshow('hsv', image)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
