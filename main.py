@@ -13,8 +13,14 @@ def checkInRange(colors, curr_pixel):
 def main():
     image = cv2.imread('4x4.png')
     original = image.copy()
-    image = remove_background(image)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    masked_img = remove_background(image)
+
+    cv2.imshow('background_removed', masked_img)
+
+    print(type(masked_img[0, 0]))
+
+    masked_img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2HSV)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     colors = {
@@ -77,7 +83,7 @@ def main():
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
     cv2.imshow('original', original)
-    # cv2.waitKey()
+    cv2.waitKey()
 
 if __name__ == '__main__':
     main()

@@ -37,7 +37,8 @@ def remove_background(image):
     mask = np.tile(mask, (1, 1, 3))
 
     # Done with imgs in range [0, 1]
-    masked_img = (mask.astype('float32') * (image.astype('float32') / 255.0)) + ((1-mask.astype('float32')) * mask_color)
-    masked_img = masked_img * 255
+    masked_img = mask * image
+    # masked_img = (mask.astype('float32') * (image.astype('float32') / 255.0)) + ((1-mask.astype('float32')) * mask_color)
+    # masked_img = masked_img * 255
 
     return masked_img
