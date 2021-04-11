@@ -10,19 +10,30 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('rubiks_face.png')
+    image = cv2.imread('3x3.jpeg')
     original = image.copy()
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
+    green = np.uint8([[[0, 0, 255]]]) #here insert the bgr values which you want to convert to hsv
+    hsvGreen = cv2.cvtColor(green, cv2.COLOR_BGR2HSV)
+    print(hsvGreen)
+
+    lowerLimit = hsvGreen[0][0][0] - 10, 100, 100
+    upperLimit = hsvGreen[0][0][0] + 10, 255, 255
+
+    print(upperLimit)
+    print(lowerLimit)
+
     colors = {
         'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
-        'blue': ([69, 120, 100], [179, 255, 255]),    # Blue
+        'blue': ([90, 50, 70], [128, 255, 255]),
+        # 'blue': ([69, 120, 100], [179, 255, 255]),    # Blue
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
-        'white' : ([0,0,0], [0,0,255]) # White
-        # 'red' :
+        'white' : ([0,0,0], [0,0,255]), # White
+        'red' : ([159, 50, 70], [180, 255, 255]) #Red
         }
 
     # Color threshold to find the squares
@@ -58,24 +69,17 @@ def main():
 
     # Draw text
     number = 0
-    print("image shape", image.shape)
-    print("original shape", original.shape)
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
             cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
             curr_color = ""
-            print("x y heighth width", x, y, x+w, y+h)
             curr_x = x + w//2
             curr_y = y + h//2
-            print(curr_x, curr_y)
             if (curr_x >= 0 and curr_x <= image.shape[1] and curr_y >= 0 and curr_y <= image.shape[0]):
-                print({"in here"})
                 curr_color = checkInRange(colors, image[curr_y][curr_x])
             string = str(curr_color ) + " " + str("#{}".format(number + 1))
             cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-            # print("indexing into image", image[x][y])
-            # cv2.putText(original, curr_color, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
             number += 1
 
     cv2.imshow('mask', mask)
