@@ -11,20 +11,22 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('4x4.png')
+    image = cv2.imread('f2.png')
+    # print(image)
     original = image.copy()
 
     masked_img = remove_background(image)
 
     cv2.imshow('background_removed', masked_img)
 
-    print(type(masked_img[0, 0]))
+    # print(type(masked_img[0, 0, 0]))
 
     masked_img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2HSV)
+    # masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     colors = {
-        'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
+        # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
@@ -39,7 +41,7 @@ def main():
     for color, (lower, upper) in colors.items():
         lower = np.array(lower, dtype=np.uint8)
         upper = np.array(upper, dtype=np.uint8)
-        color_mask = cv2.inRange(image, lower, upper)
+        color_mask = cv2.inRange(masked_img, lower, upper)
 
         #remove noise
         color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_OPEN, open_kernel, iterations=1)
@@ -74,8 +76,8 @@ def main():
             curr_color = ""
             curr_x = x + w//2
             curr_y = y + h//2
-            if (curr_x >= 0 and curr_x <= image.shape[1] and curr_y >= 0 and curr_y <= image.shape[0]):
-                curr_color = checkInRange(colors, image[curr_y][curr_x])
+            if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
+                curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
             string = str(curr_color ) + " " + str("#{}".format(number + 1))
             cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
             number += 1
