@@ -10,25 +10,14 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('3x3.jpeg')
+    image = cv2.imread('4x4.png')
     original = image.copy()
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
-    green = np.uint8([[[0, 0, 255]]]) #here insert the bgr values which you want to convert to hsv
-    hsvGreen = cv2.cvtColor(green, cv2.COLOR_BGR2HSV)
-    print(hsvGreen)
-
-    lowerLimit = hsvGreen[0][0][0] - 10, 100, 100
-    upperLimit = hsvGreen[0][0][0] + 10, 255, 255
-
-    print(upperLimit)
-    print(lowerLimit)
-
     colors = {
         'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
         'blue': ([90, 50, 70], [128, 255, 255]),
-        # 'blue': ([69, 120, 100], [179, 255, 255]),    # Blue
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
