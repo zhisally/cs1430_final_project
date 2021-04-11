@@ -14,13 +14,14 @@ def main():
     image = cv2.imread('4x4.png')
     original = image.copy()
 
-    masked_img = remove_background(image)
+    image = remove_background(image)
 
-    cv2.imshow('background_removed', masked_img)
+    cv2.imshow('background_removed', image)
 
-    print(type(masked_img[0, 0]))
+    print(type(image[0, 0]))
 
-    masked_img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2HSV)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    cv2.imshow('hsv', image)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     colors = {
@@ -29,7 +30,7 @@ def main():
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
-        'white' : ([0,0,0], [0,0,255]), # White
+        'white' : ([0,0,1], [0,0,255]), # White
         'red' : ([159, 50, 70], [180, 255, 255]) #Red
         }
 
