@@ -83,7 +83,10 @@ def main():
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
     cv2.imshow('original', original)
-    cv2.waitKey()
+    key = cv2.waitKey() & 0xFF
+    if key == ord('q'):
+        cv2.destroyAllWindows()
+        
 
 if __name__ == '__main__':
     main()
