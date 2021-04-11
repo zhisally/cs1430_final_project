@@ -11,7 +11,7 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('4x4.png')
+    image = cv2.imread('3x3.jpeg')
     original = image.copy()
 
     image = remove_background(image)
