@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from imutils import contours
+from segmentation import remove_background
 
 def checkInRange(colors, curr_pixel):
     for key, value in colors.items():
@@ -12,6 +13,7 @@ def checkInRange(colors, curr_pixel):
 def main():
     image = cv2.imread('4x4.png')
     original = image.copy()
+    image = remove_background(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
@@ -74,7 +76,7 @@ def main():
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
     cv2.imshow('original', original)
-    cv2.waitKey()
+    # cv2.waitKey()
 
 if __name__ == '__main__':
     main()

@@ -24,7 +24,7 @@ def remove_background(image):
     kernel = np.ones((20, 20), dtype=np.uint8) # Check effects of kernel size on output
     c_edges = cv2.morphologyEx(c_edges, cv2.MORPH_CLOSE, kernel)
 
-    cv2_imshow(c_edges)
+    # cv2_imshow(c_edges)
 
     # c_edges = cv2.dilate(c_edges, None)
     # c_edges = cv2.erode(c_edges, None)
