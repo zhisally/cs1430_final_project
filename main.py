@@ -34,6 +34,7 @@ def main():
         lower = np.array(lower, dtype=np.uint8)
         upper = np.array(upper, dtype=np.uint8)
         color_mask = cv2.inRange(image, lower, upper)
+
         #remove noise
         color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_OPEN, open_kernel, iterations=1)
         color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_CLOSE, close_kernel, iterations=5)
