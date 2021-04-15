@@ -10,8 +10,84 @@ def checkInRange(colors, curr_pixel):
         if (curr_pixel[0] >= lower_bound[0] and curr_pixel[0] <= upper_bound[0] and curr_pixel[1] >= lower_bound[1] and curr_pixel[1] <= upper_bound[1] and  curr_pixel[2] >= lower_bound[2] and curr_pixel[2] <= upper_bound[2]):
             return key
 
-def main():
-    image = cv2.imread('f1.png')
+def edgeDetection():
+    imgobj = cv2.imread('cube3.png')
+    gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
+    cv2.namedWindow("image")
+    blurred = cv2.GaussianBlur(gray, (3,3), 0)
+    canny = cv2.Canny(blurred, 20, 40)
+    kernel = np.ones((3,3), np.uint8)
+    dilated = cv2.dilate(canny, kernel, iterations=2)
+
+    cv2.imshow('image', dilated)
+
+    # thresh = 100
+    # ret, thresh_img = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
+    # contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # img_contours = np.zeros(imgobj.shape)
+    # cv2.drawContours(img_contours, contours, -1, (0,255,0), 3)
+    # cv2.imshow("contours", img_contours)
+    # cv2.waitKey(0)
+
+    (contours, hierarchy) = cv2.findContours(dilated.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    
+    candidates = []
+    hierarchy = hierarchy[0]
+
+    index = 0
+    pre_cX = 0
+    pre_cY = 0
+    center = []
+    for component in zip(contours, hierarchy):
+        contour = component[0]
+        peri = cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, 0.1 * peri, True)
+        area = cv2.contourArea(contour)
+        corners = len(approx)
+
+        # compute the center of the contour
+        M = cv2.moments(contour)
+
+        if M["m00"]:
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+        else:
+            cX = None
+            cY = None
+
+        if 14000 < area < 20000 and cX is not None:
+            tmp = {'index': index, 'cx': cX, 'cy': cY, 'contour': contour}
+            center.append(tmp)
+            index += 1
+
+    center.sort(key=lambda k: (k.get('cy', 0)))
+    row1 = center[0:3]
+    row1.sort(key=lambda k: (k.get('cx', 0)))
+    row2 = center[3:6]
+    row2.sort(key=lambda k: (k.get('cx', 0)))
+    row3 = center[6:9]
+    row3.sort(key=lambda k: (k.get('cx', 0)))
+
+    center.clear()
+    center = row1 + row2 + row3
+
+    print(center)
+    for component in center:
+        candidates.append(component.get('contour'))
+
+    cv2.drawContours(imgobj, candidates, -1, (0, 0, 255), 3)
+    cv2.imshow("final", imgobj)
+    cv2.waitKey(0)
+
+def sobel(image):
+    sobel_64 = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+    abs_64 = np.absolute(sobel_64)
+    sobel_8u = np.uint8(abs_64)
+    cv2.imshow('sobel', sobel_8u)
+
+
+def detectColors():
+    image = cv2.imread('cube3.png')
     # print(image)
     original = image.copy()
 
@@ -19,7 +95,6 @@ def main():
 
     cv2.imshow('background_removed', image)
 
-    print(type(image[0, 0]))
 
     masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     cv2.imshow('hsv', image)
@@ -88,6 +163,10 @@ def main():
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
+
+def main():
+    edgeDetection()
+    # detectColors()
         
 
 if __name__ == '__main__':
