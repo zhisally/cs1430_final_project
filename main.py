@@ -9,6 +9,7 @@ def checkInRange(colors, curr_pixel):
         upper_bound = value[1]
         if (curr_pixel[0] >= lower_bound[0] and curr_pixel[0] <= upper_bound[0] and curr_pixel[1] >= lower_bound[1] and curr_pixel[1] <= upper_bound[1] and  curr_pixel[2] >= lower_bound[2] and curr_pixel[2] <= upper_bound[2]):
             return key
+    print("not in any color range")
 
 def edgeDetection():
     imgobj = cv2.imread('cube3.png')
@@ -87,8 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('cube3.png')
-    # print(image)
+    image = cv2.imread('f5.png')
     original = image.copy()
 
     image = remove_background(image)
@@ -97,7 +97,7 @@ def detectColors():
 
 
     masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    cv2.imshow('hsv', image)
+    cv2.imshow('hsv', masked_img)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     colors = {
@@ -131,13 +131,17 @@ def detectColors():
     # Sort all contours from top-to-bottom or bottom-to-top
     (cnts, _) = contours.sort_contours(cnts, method="top-to-bottom")
 
+    img_contours = np.zeros(image.shape)
+    cv2.drawContours(img_contours, cnts, -1, (0,255,0), 3)
+    cv2.imshow("contours", img_contours)
+
     # Take each row of 3 and sort from left-to-right or right-to-left
     cube_rows = []
     row = []
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 3 == 0:  
+        if i % 4 == 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
@@ -147,6 +151,7 @@ def detectColors():
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
+            print("bounding rect")
             cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
             curr_color = ""
             curr_x = x + w//2
@@ -165,8 +170,7 @@ def detectColors():
         cv2.destroyAllWindows()
 
 def main():
-    edgeDetection()
-    # detectColors()
+    detectColors()
         
 
 if __name__ == '__main__':
