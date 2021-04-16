@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('f5.png')
+    image = cv2.imread('f2.png')
     original = image.copy()
 
     image = remove_background(image)
