@@ -12,7 +12,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('3x3.jpeg')
+    imgobj = cv2.imread('f2.png')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('3x3.jpeg')
+    image = cv2.imread('f2.png')
     original = image.copy()
 
     image = remove_background(image)
@@ -100,14 +100,24 @@ def detectColors():
     cv2.imshow('hsv', masked_img)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
+    # colors = {
+    #     # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
+    #     'blue': ([90, 50, 70], [128, 255, 255]),
+    #     'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
+    #     'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
+    #     'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
+    #     'red' : ([159, 50, 70], [180, 255, 255]), #Red
+    #     'white' : ([0,0,1], [0,0,255]) # White
+    #     }
+
     colors = {
         # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
-        'blue': ([90, 50, 70], [128, 255, 255]),
-        'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
-        'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
-        'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
+        'blue': ([90, 50, 70], [130, 255, 255]),
+        'yellow': ([20, 100, 100], [40, 255, 255]),   # Yellow
+        'orange': ([0, 50, 50], [30, 255, 255]),     # Orange
+        'green' : ([60 - 14, 100, 100], [60 + 20, 255, 255]), # Green
         'red' : ([159, 50, 70], [180, 255, 255]), #Red
-        'white' : ([0,0,1], [0,0,255]) # White
+        'white' : ([0,0,230], [255,255,255]) # White
         }
 
     # Color threshold to find the squares
@@ -141,7 +151,7 @@ def detectColors():
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 3 == 0:  
+        if i % 3== 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
