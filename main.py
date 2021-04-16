@@ -12,7 +12,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('better_lighting/face1.jpg')
+    imgobj = cv2.imread('better_lighting/face1.2.jpg')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('better_lighting/face1.jpg')
+    image = cv2.imread('better_lighting/face1.2.jpg')
     original = image.copy()
 
     image = remove_background(image)
@@ -112,7 +112,7 @@ def detectColors():
 
     colors = {
         # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
-        'blue': ([90, 50, 70], [130, 255, 255]),
+        'blue': ([90, 50, 50], [130, 255, 255]),
         'yellow': ([20, 100, 100], [40, 255, 255]),   # Yellow
         'orange': ([0, 50, 50], [30, 255, 255]),     # Orange
         'green' : ([60 - 14, 100, 100], [60 + 20, 255, 255]), # Green
