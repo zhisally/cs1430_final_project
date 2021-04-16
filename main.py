@@ -12,7 +12,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('f3.png')
+    imgobj = cv2.imread('3x3.jpeg')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('f3.png')
+    image = cv2.imread('3x3.jpeg')
     original = image.copy()
 
     image = remove_background(image)
@@ -106,8 +106,8 @@ def detectColors():
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
-        'white' : ([0,0,1], [0,0,255]), # White
-        'red' : ([159, 50, 70], [180, 255, 255]) #Red
+        'red' : ([159, 50, 70], [180, 255, 255]), #Red
+        'white' : ([0,0,1], [0,0,255]) # White
         }
 
     # Color threshold to find the squares
@@ -141,7 +141,7 @@ def detectColors():
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 4 == 0:  
+        if i % 3 == 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
@@ -151,16 +151,16 @@ def detectColors():
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
-            print("bounding rect")
-            cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
-            curr_color = ""
-            curr_x = x + w//2
-            curr_y = y + h//2
-            if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
-                curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
-            string = str(curr_color ) + " " + str("#{}".format(number + 1))
-            cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-            number += 1
+            if (w*h >= 2000):
+                cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
+                curr_color = ""
+                curr_x = x + w//2
+                curr_y = y + h//2
+                if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
+                    curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
+                string = str(curr_color ) + " " + str("#{}".format(number + 1))
+                cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+                number += 1
 
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
