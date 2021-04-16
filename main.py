@@ -12,7 +12,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('cube3.png')
+    imgobj = cv2.imread('f3.png')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('f2.png')
+    image = cv2.imread('f3.png')
     original = image.copy()
 
     image = remove_background(image)
