@@ -11,7 +11,7 @@ def checkInRange(colors, curr_pixel):
             return key
 
 def main():
-    image = cv2.imread('3x3.jpeg')
+    image = cv2.imread('f3.png')
     
     original = image.copy()
 
@@ -60,7 +60,7 @@ def main():
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 3 == 0:  
+        if i % 4 == 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
@@ -89,7 +89,7 @@ def main():
                 string = str(curr_color ) + " " + str("#{}".format(number + 1))
                 cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
                 number += 1
-    cv2.rectangle(original, (415, 0), (415 + 50, 0 + 50), (36,255,12), 2)
+    # cv2.rectangle(original, (415, 0), (415 + 50, 0 + 50), (36,255,12), 2)
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
     cv2.imshow('original', original)
