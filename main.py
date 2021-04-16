@@ -6,6 +6,17 @@ import kociemba
 import argparse
 import os
 
+cube_state = []
+
+kociemba = {
+        'blue': 'F',
+        'yellow': 'L',
+        'orange': 'U',
+        'green' : 'R',
+        'red' : 'D',
+        'white': 'B'
+        }
+
 def checkInRange(colors, curr_pixel):
     for key, value in colors.items():
         lower_bound = value[0]
@@ -187,7 +198,15 @@ def detectColors(file):
     
     return face_colors
 
+def getKociembaString(cube_state_list):
+    kociemba_string = ""
+    for color in cube_state_list:
+        kociemba_string = kociemba_string + kociemba[color]
+    return kociemba_string
+
 def main():
+    cube_state.clear()
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-i', '--images', help='File path to images folder')
@@ -196,11 +215,11 @@ def main():
     for filename in sorted(os.listdir(image_folder)):
         if filename.endswith(".jpeg") or filename.endswith(".jpg") or filename.endswith(".png"):
             path = os.path.join(image_folder, filename)
-            print(path)
-            detectColors(path)
-
-    detectColors("working-images/face1.jpeg")
+            face_state = detectColors(path)
+            cube_state.extend(face_state)
+    kociemba_string = getKociembaString(cube_state)
     
+    print(kociemba_string)
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
