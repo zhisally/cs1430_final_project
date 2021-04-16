@@ -3,6 +3,8 @@ import numpy as np
 from imutils import contours
 from segmentation import remove_background
 import kociemba
+import argparse
+import os
 
 def checkInRange(colors, curr_pixel):
     for key, value in colors.items():
@@ -88,8 +90,9 @@ def sobel(image):
     cv2.imshow('sobel', sobel_8u)
 
 
-def detectColors():
-    image = cv2.imread('photoshopped/face1.2.jpg')
+def detectColors(file):
+    print("in detect colors")
+    image = cv2.imread(file)
     original = image.copy()
 
     image = remove_background(image)
@@ -147,6 +150,7 @@ def detectColors():
     img_contours = np.zeros(image.shape)
     cv2.drawContours(img_contours, cnts, -1, (0,255,0), 3)
     cv2.imshow("contours", img_contours)
+    print(len(cnts))
 
     # Take each row of 3 and sort from left-to-right or right-to-left
     cube_rows = []
@@ -154,7 +158,7 @@ def detectColors():
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 4== 0:  
+        if i % 3== 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
@@ -177,7 +181,6 @@ def detectColors():
                 number += 1
                 face_colors.append(curr_color)
 
-    print(face_colors)
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
     cv2.imshow('original', original)
@@ -185,7 +188,19 @@ def detectColors():
     return face_colors
 
 def main():
-    detectColors()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-i', '--images', help='File path to images folder')
+    args = parser.parse_args()
+    image_folder = args.images
+    for filename in sorted(os.listdir(image_folder)):
+        if filename.endswith(".jpeg") or filename.endswith(".jpg") or filename.endswith(".png"):
+            path = os.path.join(image_folder, filename)
+            print(path)
+            detectColors(path)
+
+    detectColors("working-images/face1.jpeg")
+    
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
