@@ -12,7 +12,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('f2.png')
+    imgobj = cv2.imread('cube5 8.jpg')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('f2.png')
+    image = cv2.imread('cube5 8.jpg')
     original = image.copy()
 
     image = remove_background(image)
@@ -117,7 +117,7 @@ def detectColors():
         'orange': ([0, 50, 50], [30, 255, 255]),     # Orange
         'green' : ([60 - 14, 100, 100], [60 + 20, 255, 255]), # Green
         'red' : ([159, 50, 70], [180, 255, 255]), #Red
-        'white' : ([0,0,230], [255,255,255]) # White
+        'white' : ([0,0,210], [255,255,255]) # White
         }
 
     # Color threshold to find the squares
