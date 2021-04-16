@@ -88,7 +88,7 @@ def sobel(image):
 
 
 def detectColors():
-    image = cv2.imread('f2.png')
+    image = cv2.imread('f5.png')
     original = image.copy()
 
     image = remove_background(image)
@@ -151,16 +151,16 @@ def detectColors():
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
-            print("bounding rect")
-            cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
-            curr_color = ""
-            curr_x = x + w//2
-            curr_y = y + h//2
-            if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
-                curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
-            string = str(curr_color ) + " " + str("#{}".format(number + 1))
-            cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-            number += 1
+            if (w*h >= 2000):
+                cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
+                curr_color = ""
+                curr_x = x + w//2
+                curr_y = y + h//2
+                if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
+                    curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
+                string = str(curr_color ) + " " + str("#{}".format(number + 1))
+                cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+                number += 1
 
     cv2.imshow('mask', mask)
     cv2.imwrite('mask.png', mask)
