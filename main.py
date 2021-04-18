@@ -14,7 +14,6 @@ def checkInRange(colors, curr_pixel):
 
 
 def main():
-
     for i in range(6):
         pic = str(i + 1)
         image = cv2.imread('better_lighting/face' + pic + '.jpeg')
