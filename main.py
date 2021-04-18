@@ -103,7 +103,6 @@ def sobel(image):
 
 
 def detectColors(file, number):
-    print(number)
     image = cv2.imread(file)
     original = image.copy()
 
@@ -121,7 +120,7 @@ def detectColors(file, number):
         # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
-        'red' : ([0, 100, 100], [10, 255, 255]), #Red,
+        'red' : ([0, 100, 100], [8, 255, 255]), #Red,
         'red2' : ([159, 50, 70], [180, 255, 255]), #Red
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
@@ -162,7 +161,7 @@ def detectColors(file, number):
 
     img_contours = np.zeros(image.shape)
     cv2.drawContours(img_contours, cnts, -1, (0,255,0), 3)
-    # cv2.imshow("contours", img_contours)
+    cv2.imshow("contours" + str(number), img_contours)
 
     new_cnts = []
     for contour in cnts:
@@ -187,7 +186,6 @@ def detectColors(file, number):
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
-            print(x, y, w, h)
             cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
             curr_color = ""
             curr_x = x + w//8
@@ -198,7 +196,7 @@ def detectColors(file, number):
             cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
             face_colors.append(curr_color)
 
-    # cv2.imshow('mask' + str(number), mask)
+    cv2.imshow('mask' + str(number), mask)
     # cv2.imwrite('mask.png', mask)
     cv2.imshow('photo with bounding squares ' + str(number), original)
     
@@ -228,8 +226,6 @@ def main():
             cube_state.extend(face_state)
             img_number += 1
     kociemba_string = getKociembaString(cube_state)
-
-    # detectColors("cube5.jpg")
     
     print(kociemba_string)
     key = cv2.waitKey() & 0xFF
