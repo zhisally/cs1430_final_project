@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from imutils import contours
 from segmentation import remove_background
-import kociemba
+import kociemba as kc
 import argparse
 import os
 
@@ -102,7 +102,6 @@ def sobel(image):
 
 
 def detectColors(file):
-    print("in detect colors")
     image = cv2.imread(file)
     original = image.copy()
 
@@ -161,7 +160,7 @@ def detectColors(file):
     img_contours = np.zeros(image.shape)
     cv2.drawContours(img_contours, cnts, -1, (0,255,0), 3)
     cv2.imshow("contours", img_contours)
-    print(len(cnts))
+    print("num contours", len(cnts))
 
     # Take each row of 3 and sort from left-to-right or right-to-left
     cube_rows = []
@@ -180,6 +179,7 @@ def detectColors(file):
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
+            print(x, y, w, h)
             if (w*h >= 2000):
                 cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
                 curr_color = ""
@@ -223,7 +223,7 @@ def main():
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
-    print(kociemba.solve('RRBBUFBFBRLRRRFRDDURUBFBBRFLUDUDFLLFFLLLLDFBDDDUUBDLUU'))
+    print(kc.solve('RRBBUFBFBRLRRRFRDDURUBFBBRFLUDUDFLLFFLLLLDFBDDDUUBDLUU'))
         
 
 if __name__ == '__main__':
