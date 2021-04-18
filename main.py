@@ -62,25 +62,11 @@ def main():
         
         print('Face ' + pic + ': ', color_lst)
     
-    print("current cube state-------")
-    print(cube_state)
     cube_state_string = getKociembaString(cube_state)
     if (len(cube_state_string) != 54):
         print("Kociemba string not appropriate length")
-    print("solution")
+    print("Solution:")
     print(kc.solve(cube_state_string))
-    
-    # test_state = ['RED', 'RED', 'RED', 'RED', 'RED', 'RED', 'RED', 'RED', 'RED', 
-    # 'BLUE', 'BLUE', 'BLUE', 'WHITE', 'WHITE', 'WHITE', 'WHITE', 'WHITE', 'WHITE', 
-    # 'YELLOW', 'YELLOW', 'YELLOW', 'BLUE', 'BLUE', 'BLUE', 'BLUE', 'BLUE', 'BLUE',
-    # 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE', 'ORANGE',
-    # 'GREEN', 'GREEN', 'GREEN', 'YELLOW', 'YELLOW', 'YELLOW', 'YELLOW', 'YELLOW', 'YELLOW',
-    # 'WHITE', 'WHITE', 'WHITE', 'GREEN', 'GREEN', 'GREEN', 'GREEN', 'GREEN', 'GREEN']
-    # test_string = getKociembaString(test_state)
-    # print(test_string)
-
-    # print("test solution")    
-    # print(kc.solve(test_string))
     
         
 if __name__ == '__main__':
