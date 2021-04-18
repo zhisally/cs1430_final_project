@@ -101,17 +101,18 @@ def sobel(image):
     cv2.imshow('sobel', sobel_8u)
 
 
-def detectColors(file):
+def detectColors(file, number):
+    print(number)
     image = cv2.imread(file)
     original = image.copy()
 
     image = remove_background(image)
 
-    cv2.imshow('background_removed', image)
+    # cv2.imshow('background_removed', image)
 
 
     masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    cv2.imshow('hsv', masked_img)
+    # cv2.imshow('hsv', masked_img)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     #old ranges
@@ -119,9 +120,10 @@ def detectColors(file):
         # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
+        'red' : ([0, 100, 100], [10, 255, 255]), #Red,
+        'red' : ([159, 50, 70], [180, 255, 255]), #Red
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
-        'red' : ([159, 50, 70], [180, 255, 255]), #Red
         # 'white' : ([0,0,1], [0,0,255]) # White
         'white': ([0,0,210], [255,255,255])
         }
@@ -159,42 +161,45 @@ def detectColors(file):
 
     img_contours = np.zeros(image.shape)
     cv2.drawContours(img_contours, cnts, -1, (0,255,0), 3)
-    cv2.imshow("contours", img_contours)
-    print("num contours", len(cnts))
+    # cv2.imshow("contours", img_contours)
 
+    new_cnts = []
+    for contour in cnts:
+        x, y, w, h = cv2.boundingRect(contour)
+        if (w*h) >= 4000:
+            new_cnts.append(contour)
+
+    
     # Take each row of 3 and sort from left-to-right or right-to-left
     cube_rows = []
     row = []
 
-    for (i, c) in enumerate(cnts, 1):
+    for (i, c) in enumerate(new_cnts, 1):
         row.append(c)
-        if i % 3== 0:  
-            (cnts, _) = contours.sort_contours(row, method="left-to-right")
-            cube_rows.append(cnts)
+        if i % 3 == 0:  
+            (new_cnts, _) = contours.sort_contours(row, method="left-to-right")
+            cube_rows.append(new_cnts)
             row = []
 
     face_colors = []
     # Draw text
-    number = 0
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
             print(x, y, w, h)
-            if (w*h >= 2000):
-                cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
-                curr_color = ""
-                curr_x = x + w//2
-                curr_y = y + h//2
-                if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
-                    curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
-                string = str(curr_color ) + " " + str("#{}".format(number + 1))
-                cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-                number += 1
-                face_colors.append(curr_color)
+            cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
+            curr_color = ""
+            curr_x = x + w//2
+            curr_y = y + h//2
+            if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
+                curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
+            string = str(curr_color ) + " " + str("#{}".format(number + 1))
+            cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+            face_colors.append(curr_color)
 
-    cv2.imshow('mask', mask)
-    cv2.imwrite('mask.png', mask)
-    cv2.imshow('original', original)
+    # cv2.imshow('mask' + str(number), mask)
+    # cv2.imwrite('mask.png', mask)
+    cv2.imshow('photo with bounding squares ' + str(number), original)
     
     return face_colors
 
@@ -212,12 +217,18 @@ def main():
     parser.add_argument('-i', '--images', help='File path to images folder')
     args = parser.parse_args()
     image_folder = args.images
+    
+    number = 1
+
     for filename in sorted(os.listdir(image_folder)):
         if filename.endswith(".jpeg") or filename.endswith(".jpg") or filename.endswith(".png"):
             path = os.path.join(image_folder, filename)
-            face_state = detectColors(path)
+            face_state = detectColors(path, number)
             cube_state.extend(face_state)
+            number += 1
     kociemba_string = getKociembaString(cube_state)
+
+    # detectColors("cube5.jpg")
     
     print(kociemba_string)
     key = cv2.waitKey() & 0xFF
