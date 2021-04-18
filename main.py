@@ -189,8 +189,8 @@ def detectColors(file, number):
             print(x, y, w, h)
             cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
             curr_color = ""
-            curr_x = x + w//2
-            curr_y = y + h//2
+            curr_x = x + w//8
+            curr_y = y + h//8
             if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
                 curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
             string = str(curr_color ) + " " + str("#{}".format(number + 1))
