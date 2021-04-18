@@ -42,3 +42,4 @@ def remove_background(image):
     # masked_img = masked_img * 255
 
     return masked_img
+
