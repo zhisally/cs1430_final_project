@@ -14,6 +14,7 @@ kociemba = {
         'orange': 'U',
         'green' : 'R',
         'red' : 'D',
+        'red2' : 'D',
         'white': 'B'
         }
 
@@ -121,7 +122,7 @@ def detectColors(file, number):
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'red' : ([0, 100, 100], [10, 255, 255]), #Red,
-        'red' : ([159, 50, 70], [180, 255, 255]), #Red
+        'red2' : ([159, 50, 70], [180, 255, 255]), #Red
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
         # 'white' : ([0,0,1], [0,0,255]) # White
@@ -218,14 +219,14 @@ def main():
     args = parser.parse_args()
     image_folder = args.images
     
-    number = 1
+    img_number = 1
 
     for filename in sorted(os.listdir(image_folder)):
         if filename.endswith(".jpeg") or filename.endswith(".jpg") or filename.endswith(".png"):
             path = os.path.join(image_folder, filename)
-            face_state = detectColors(path, number)
+            face_state = detectColors(path, img_number)
             cube_state.extend(face_state)
-            number += 1
+            img_number += 1
     kociemba_string = getKociembaString(cube_state)
 
     # detectColors("cube5.jpg")
@@ -234,6 +235,8 @@ def main():
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
+    if (len(kociemba_string) != 54):
+        print("Incorrect length for Kociemba input")
     print(kc.solve('RRBBUFBFBRLRRRFRDDURUBFBBRFLUDUDFLLFFLLLLDFBDDDUUBDLUU'))
         
 
