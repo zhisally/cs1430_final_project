@@ -14,7 +14,7 @@ def remove_background(image):
     # Canny Edge Detector (check if need adjust depending on image)
     canny_low = 50 # Started at 15
     canny_high = 150
-
+    
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     c_edges = cv2.Canny(gray_img, canny_low, canny_high)
 
@@ -28,11 +28,9 @@ def remove_background(image):
 
     mask = np.expand_dims(mask, axis=2)
     mask = np.tile(mask, (1, 1, 3))
-
     # Done with imgs in range [0, 1]
     masked_img = mask * image
-
-    return masked_img
+    return mask, masked_img
 
 def find_four_corners(img, dst):
     # get all points
@@ -101,7 +99,7 @@ def harris_corner(img):
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     
     gray = np.float32(gray)
-    dst = cv2.cornerHarris(gray,5,3,0.04)
+    dst = cv2.cornerHarris(gray,10,3,0.04)
     # result is dilated for marking the corners, not important
     dst = cv2.dilate(dst,None)
     # print(dst.shape)
@@ -131,7 +129,6 @@ def corner_detection(image):
     cropped_cube = crop_image(rotated_original, four_corners)
 
     cv2.imshow("cropped", cropped_cube)
-
     return cropped_cube
 
 def get_square(image, dim=3, row=0, col=0):
