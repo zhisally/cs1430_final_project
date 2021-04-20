@@ -45,47 +45,47 @@ def main():
     #         face_state = detectColors(path, img_number)
     #         cube_state.extend(face_state)
 
-    # for i in range(6):
-    #     pic = str(i + 1)
-    #     image = cv2.imread('dark_lighting/face' + pic + '.jpeg')
-    #     cropped_cube = segmentation.corner_detection(image)
-    #     dims = 3
-    #     color_lst = []
+    for i in range(6):
+        pic = str(i + 1)
+        image = cv2.imread('better_lighting/face' + pic + '.jpeg')
+        cropped_cube = segmentation.corner_detection(image)
+        dims = 3
+        color_lst = []
 
-    #     for r in range(dims):
-    #         for c in range(dims):
-    #             square = segmentation.get_square(cropped_cube, dim=dims, row=r, col=c)
-    #             rgb_colors = classify_colors(square, 2, show_chart=False)
-    #             matched_color = match_color(rgb_colors)
-    #             color_lst.append(matched_color)
-    #             cube_state.append(matched_color)
+        for r in range(dims):
+            for c in range(dims):
+                square = segmentation.get_square(cropped_cube, dim=dims, row=r, col=c)
+                rgb_colors = classify_colors(square, 2, show_chart=False)
+                matched_color = match_color(rgb_colors)
+                color_lst.append(matched_color)
+                cube_state.append(matched_color)
         
-    #     print('Face ' + pic + ': ', color_lst)
+        print('Face ' + pic + ': ', color_lst)
     
-    # cube_state_string = getKociembaString(cube_state)
-    # if (len(cube_state_string) != 54):
-    #     print("Kociemba string not appropriate length")
-    # print("Solution:")
-    # print(kc.solve(cube_state_string))
+    cube_state_string = getKociembaString(cube_state)
+    if (len(cube_state_string) != 54):
+        print("Kociemba string not appropriate length")
+    print("Solution:")
+    print(kc.solve(cube_state_string))
 
-    image = cv2.imread('dark_lighting/face1.jpeg')
-    mask, bg_removed = segmentation.remove_background(image)
+    # image = cv2.imread('dark_lighting/face1.jpeg')
+    # mask, bg_removed = segmentation.remove_background(image)
 
-    cv2.imshow("original", image)
-    cv2.imshow("bg removed", bg_removed)
+    # cv2.imshow("original", image)
+    # cv2.imshow("bg removed", bg_removed)
 
-    blurred_frame = cv2.GaussianBlur(image, (55, 55), 0)
-    frame = np.where(mask == 1, image, blurred_frame)
-    cv2.imshow("blurred", frame)
+    # blurred_frame = cv2.GaussianBlur(image, (55, 55), 0)
+    # frame = np.where(mask == 1, image, blurred_frame)
+    # cv2.imshow("blurred", frame)
 
-    # mask2, bg_removed2 = segmentation.remove_background(frame)
-    # cv2.imshow("blurred2", bg_removed2)
-    corners = segmentation.corner_detection(frame)
-    cv2.imshow("corners", corners)
+    # # mask2, bg_removed2 = segmentation.remove_background(frame)
+    # # cv2.imshow("blurred2", bg_removed2)
+    # corners = segmentation.corner_detection(frame)
+    # cv2.imshow("corners", corners)
 
-    key = cv2.waitKey() & 0xFF
-    if key == ord('q'):
-        cv2.destroyAllWindows()
+    # key = cv2.waitKey() & 0xFF
+    # if key == ord('q'):
+    #     cv2.destroyAllWindows()
 
     
         
