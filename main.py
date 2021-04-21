@@ -47,7 +47,7 @@ def main():
 
     for i in range(6):
         pic = str(i + 1)
-        image = cv2.imread('images/face' + pic + '.jpeg')
+        image = cv2.imread('cube2/face' + pic + '.jpeg')
         cropped_cube = segmentation.corner_detection(image)
         dims = 3
         color_lst = []
