@@ -107,35 +107,18 @@ def detectColors(file, number):
     original = image.copy()
 
     image = remove_background(image)
-
-    # cv2.imshow('background_removed' + str(number), image)
-
     masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # cv2.imshow('hsv' + str(number), masked_img)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
-    #old ranges
     colors = {
-        # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'red' : ([0, 100, 100], [8, 255, 255]), #Red,
         'red2' : ([159, 50, 70], [180, 255, 255]), #Red
         'orange': ([0, 110, 125], [17, 255, 255]),     # Orange
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
-        # 'white' : ([0,0,1], [0,0,255]) # White
         'white': ([0,0,210], [255,255,255])
         }
-
-    # colors = {
-    #     # 'gray': ([76, 0, 41], [179, 255, 70]),        # Gray
-    #     'blue': ([90, 50, 50], [130, 255, 255]),
-    #     'yellow': ([20, 100, 100], [40, 255, 255]),   # Yellow
-    #     'orange': ([0, 50, 50], [30, 255, 255]),     # Orange
-    #     'green' : ([60 - 14, 100, 100], [60 + 20, 255, 255]), # Green
-    #     'red' : ([159, 50, 70], [180, 255, 255]), #Red
-    #     'white' : ([0,0,210], [255,255,255]) # White
-    #     }
 
     # Color threshold to find the squares
     open_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
