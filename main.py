@@ -24,7 +24,6 @@ def checkInRange(colors, curr_pixel):
             return key
     print("not in any color range")
 
-<<<<<<< HEAD
 def main():
     image = cv2.imread('3x3.jpeg')
     
@@ -111,7 +110,7 @@ def main():
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
-=======
+        
 def getKociembaString(cube_state_list):
     kociemba_string = ""
     for color in cube_state_list:
@@ -155,7 +154,6 @@ def main():
     print("Solution:")
     print(kc.solve(cube_state_string))
     
->>>>>>> corner-detection
         
 if __name__ == '__main__':
     main()
