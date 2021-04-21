@@ -179,7 +179,6 @@ while True:
         
     cropped_cube = image[box_start[1]:box_start[1]+image.shape[1] // 3, box_start[0]:box_start[0] + image.shape[1] // 3]
 
-
     # mask,image = segmentation.remove_background(image)
 
     cropped_cube = cv2.cvtColor(cropped_cube, cv2.COLOR_BGR2HSV)
@@ -213,6 +212,8 @@ while True:
     row = []
 
     for (i, c) in enumerate(cnts, 1):
+        x,y,w,h = cv2.boundingRect(c)
+        # if (w*h >= 2000):
         row.append(c)
         if i % 3 == 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
@@ -225,7 +226,7 @@ while True:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
             if (w*h >= 2000):
-                cv2.rectangle(original, (x, y), (x + w, y + h), (36,255,12), 2)
+                cv2.rectangle(original, (x + box_start[0], y + box_start[1]), (x + box_start[0] + w, y + box_start[1] + h), (36,255,12), 2)
                 curr_color = ""
                 curr_x = x + w//2
                 curr_y = y + h//2
@@ -241,7 +242,7 @@ while True:
                     curr_color = checkInRange(colors, image[curr_y][curr_x])
                     # curr_color = checkInRange(colors, curr)
                 string = str(curr_color ) + " " + str("#{}".format(number + 1))
-                cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+                cv2.putText(original, string, (x+box_start[0],y+box_start[1] - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
                 number += 1
 
 

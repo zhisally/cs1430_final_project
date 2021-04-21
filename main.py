@@ -47,8 +47,9 @@ def main():
 
     for i in range(6):
         pic = str(i + 1)
-        image = cv2.imread('better_lighting/face' + pic + '.jpeg')
+        image = cv2.imread('cube2/face' + pic + '.jpeg')
         cropped_cube = segmentation.corner_detection(image)
+        # cropped_cube = segmentation.detect_cube(image)
         dims = 3
         color_lst = []
 
@@ -68,7 +69,19 @@ def main():
     print("Solution:")
     print(kc.solve(cube_state_string))
 
-    # image = cv2.imread('dark_lighting/face1.jpeg')
+
+    # image = cv2.imread('blue_background/face1.jpeg')
+    # image = segmentation.corner_detection(image)
+    # kernel = np.ones((7,7),np.uint8)
+    # image = cv2.dilate(image,kernel,iterations = 1)
+    # cv2.imshow("image", image)
+
+    image = cv2.imread('cube2/face6.jpeg')
+    image = segmentation.corner_detection(image)
+    cv2.imshow("image", image)
+
+    # image = cv2.imread('messy_background/face1.jpeg')
+    # # image = cv2.GaussianBlur(image, (11,11), 0)
     # mask, bg_removed = segmentation.remove_background(image)
 
     # cv2.imshow("original", image)
@@ -83,9 +96,9 @@ def main():
     # corners = segmentation.corner_detection(frame)
     # cv2.imshow("corners", corners)
 
-    # key = cv2.waitKey() & 0xFF
-    # if key == ord('q'):
-    #     cv2.destroyAllWindows()
+    key = cv2.waitKey() & 0xFF
+    if key == ord('q'):
+        cv2.destroyAllWindows()
 
     
         
