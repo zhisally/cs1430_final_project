@@ -30,7 +30,7 @@ def remove_background(image):
     mask = np.tile(mask, (1, 1, 3))
     # Done with imgs in range [0, 1]
     masked_img = mask * image
-    return mask, masked_img
+    return masked_img
 
 def find_four_corners(img, dst):
     # get all points
