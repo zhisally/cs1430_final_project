@@ -25,7 +25,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def main():
-    image = cv2.imread('3x3.jpeg')
+    image = cv2.imread('f1.png')
     
     original = image.copy()
 
@@ -74,7 +74,7 @@ def main():
 
     for (i, c) in enumerate(cnts, 1):
         row.append(c)
-        if i % 3 == 0:  
+        if i % 4 == 0:  
             (cnts, _) = contours.sort_contours(row, method="left-to-right")
             cube_rows.append(cnts)
             row = []
