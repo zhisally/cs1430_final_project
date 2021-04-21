@@ -108,11 +108,11 @@ def detectColors(file, number):
 
     image = remove_background(image)
 
-    # cv2.imshow('background_removed', image)
+    cv2.imshow('background_removed' + str(number), image)
 
 
     masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # cv2.imshow('hsv', masked_img)
+    cv2.imshow('hsv' + str(number), masked_img)
     mask = np.zeros(image.shape, dtype=np.uint8)
 
     #old ranges
@@ -183,6 +183,7 @@ def detectColors(file, number):
 
     face_colors = []
     # Draw text
+    face_num = 1
     for row in cube_rows:
         for c in row:
             x,y,w,h = cv2.boundingRect(c)
@@ -192,12 +193,12 @@ def detectColors(file, number):
             curr_y = y + h//8
             if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
                 curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
-            string = str(curr_color ) + " " + str("#{}".format(number + 1))
+            string = str(curr_color ) + " " + str("#{}".format(face_num))
             cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
             face_colors.append(curr_color)
+            face_num += 1
 
     cv2.imshow('mask' + str(number), mask)
-    # cv2.imwrite('mask.png', mask)
     cv2.imshow('photo with bounding squares ' + str(number), original)
     
     return face_colors
@@ -227,7 +228,6 @@ def main():
             img_number += 1
     kociemba_string = getKociembaString(cube_state)
     
-    print(kociemba_string)
     key = cv2.waitKey() & 0xFF
     if key == ord('q'):
         cv2.destroyAllWindows()
