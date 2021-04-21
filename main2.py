@@ -11,11 +11,11 @@ cube_state = []
 kociemba = {
         'blue': 'F',
         'yellow': 'L',
-        'orange': 'U',
-        'green' : 'R',
-        'red' : 'D',
-        'red2' : 'D',
-        'white': 'B'
+        'orange': 'D',
+        'green' : 'B',
+        'red' : 'U',
+        'red2' : 'U',
+        'white': 'R'
         }
 
 def checkInRange(colors, curr_pixel):
@@ -27,7 +27,7 @@ def checkInRange(colors, curr_pixel):
     print("not in any color range")
 
 def edgeDetection():
-    imgobj = cv2.imread('f2.png')
+    imgobj = cv2.imread('4x4/f1.png')
     gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
     cv2.namedWindow("image")
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
@@ -36,14 +36,6 @@ def edgeDetection():
     dilated = cv2.dilate(canny, kernel, iterations=2)
 
     cv2.imshow('image', dilated)
-
-    # thresh = 100
-    # ret, thresh_img = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)
-    # contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    # img_contours = np.zeros(imgobj.shape)
-    # cv2.drawContours(img_contours, contours, -1, (0,255,0), 3)
-    # cv2.imshow("contours", img_contours)
-    # cv2.waitKey(0)
 
     (contours, hierarchy) = cv2.findContours(dilated.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     
