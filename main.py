@@ -22,7 +22,6 @@ def getKociembaString(cube_state_list):
         kociemba_string = kociemba_string + kociemba[color]
     return kociemba_string
 
-
 def main():
 
     cube_state = []
