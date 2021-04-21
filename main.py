@@ -28,7 +28,7 @@ def main():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-i', '--images', default=os.getcwd() + '/images/', help='File path to images folder')
+    parser.add_argument('-i', '--images', default=os.getcwd() + '/images-main1/', help='File path to images folder')
     args = parser.parse_args()
     image_folder = args.images
 
