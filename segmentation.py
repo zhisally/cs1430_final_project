@@ -6,12 +6,12 @@ from imutils import rotate
 import math
 
 '''
-4/10/21: Function removes background of image input
+Function removes background of image input
 Takes image (array form) and outputs an image array of same dimensions
 but with background removed
 '''
 def remove_background(image):
-    # Canny Edge Detector (check if need adjust depending on image)
+    # Canny Edge Detector 
     canny_low = 50 # Started at 15
     canny_high = 150
     
