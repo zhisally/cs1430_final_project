@@ -18,91 +18,7 @@ kociemba = {
         'white': 'R'
         }
 
-def checkInRange(colors, curr_pixel):
-    for key, value in colors.items():
-        lower_bound = value[0]
-        upper_bound = value[1]
-        if (curr_pixel[0] >= lower_bound[0] and curr_pixel[0] <= upper_bound[0] and curr_pixel[1] >= lower_bound[1] and curr_pixel[1] <= upper_bound[1] and  curr_pixel[2] >= lower_bound[2] and curr_pixel[2] <= upper_bound[2]):
-            return key
-    print("not in any color range")
-
-def edgeDetection():
-    imgobj = cv2.imread('4x4/f1.png')
-    gray = cv2.cvtColor(imgobj, cv2.COLOR_BGR2GRAY)
-    cv2.namedWindow("image")
-    blurred = cv2.GaussianBlur(gray, (3,3), 0)
-    canny = cv2.Canny(blurred, 20, 40)
-    kernel = np.ones((3,3), np.uint8)
-    dilated = cv2.dilate(canny, kernel, iterations=2)
-
-    cv2.imshow('image', dilated)
-
-    (contours, hierarchy) = cv2.findContours(dilated.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    
-    candidates = []
-    hierarchy = hierarchy[0]
-
-    index = 0
-    pre_cX = 0
-    pre_cY = 0
-    center = []
-    for component in zip(contours, hierarchy):
-        contour = component[0]
-        peri = cv2.arcLength(contour, True)
-        approx = cv2.approxPolyDP(contour, 0.1 * peri, True)
-        area = cv2.contourArea(contour)
-        corners = len(approx)
-
-        # compute the center of the contour
-        M = cv2.moments(contour)
-
-        if M["m00"]:
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-        else:
-            cX = None
-            cY = None
-
-        if 14000 < area < 20000 and cX is not None:
-            tmp = {'index': index, 'cx': cX, 'cy': cY, 'contour': contour}
-            center.append(tmp)
-            index += 1
-
-    center.sort(key=lambda k: (k.get('cy', 0)))
-    row1 = center[0:3]
-    row1.sort(key=lambda k: (k.get('cx', 0)))
-    row2 = center[3:6]
-    row2.sort(key=lambda k: (k.get('cx', 0)))
-    row3 = center[6:9]
-    row3.sort(key=lambda k: (k.get('cx', 0)))
-
-    center.clear()
-    center = row1 + row2 + row3
-
-    print(center)
-    for component in center:
-        candidates.append(component.get('contour'))
-
-    cv2.drawContours(imgobj, candidates, -1, (0, 0, 255), 3)
-    cv2.imshow("final", imgobj)
-    cv2.waitKey(0)
-
-def sobel(image):
-    sobel_64 = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
-    abs_64 = np.absolute(sobel_64)
-    sobel_8u = np.uint8(abs_64)
-    cv2.imshow('sobel', sobel_8u)
-
-
-def detectColors(file, number):
-    image = cv2.imread(file)
-    original = image.copy()
-
-    image = remove_background(image)
-    masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    mask = np.zeros(image.shape, dtype=np.uint8)
-
-    colors = {
+colors = {
         'blue': ([90, 50, 70], [128, 255, 255]),
         'yellow': ([21, 110, 117], [45, 255, 255]),   # Yellow
         'red' : ([0, 100, 100], [8, 255, 255]), #Red,
@@ -111,6 +27,31 @@ def detectColors(file, number):
         'green' : ([60 - 20, 100, 100], [60 + 20, 255, 255]), # Green
         'white': ([0,0,210], [255,255,255])
         }
+
+'''
+Checks whether the color is within the color ranges declared
+'''
+def checkInRange(curr_pixel):
+    for key, value in colors.items():
+        lower_bound = value[0]
+        upper_bound = value[1]
+        if (curr_pixel[0] >= lower_bound[0] and curr_pixel[0] <= upper_bound[0] and curr_pixel[1] >= lower_bound[1] and curr_pixel[1] <= upper_bound[1] and  curr_pixel[2] >= lower_bound[2] and curr_pixel[2] <= upper_bound[2]):
+            return key
+    print("not in any color range")
+
+'''
+Takes in a file and file number in the folder and detects the colors of the cube face.
+param file: file to image
+param number: the number of the image in the sequence
+returns: list of colors
+'''
+def detectColors(file, number):
+    image = cv2.imread(file)
+    original = image.copy()
+
+    image = remove_background(image)
+    masked_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    mask = np.zeros(image.shape, dtype=np.uint8)
 
     # Color threshold to find the squares
     open_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
@@ -166,7 +107,7 @@ def detectColors(file, number):
             curr_x = x + w//8
             curr_y = y + h//8
             if (curr_x >= 0 and curr_x <= masked_img.shape[1] and curr_y >= 0 and curr_y <= masked_img.shape[0]):
-                curr_color = checkInRange(colors, masked_img[curr_y][curr_x])
+                curr_color = checkInRange(masked_img[curr_y][curr_x])
             string = str(curr_color ) + " " + str("#{}".format(face_num))
             cv2.putText(original, string, (x,y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
             face_colors.append(curr_color)
@@ -177,6 +118,9 @@ def detectColors(file, number):
     
     return face_colors
 
+'''
+Converts cube state list into kociemba format string
+'''
 def getKociembaString(cube_state_list):
     kociemba_string = ""
     for color in cube_state_list:
