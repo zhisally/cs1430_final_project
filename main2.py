@@ -41,9 +41,11 @@ def checkInRange(curr_pixel):
 
 '''
 Takes in a file and file number in the folder and detects the colors of the cube face.
-param file: file to image
-param number: the number of the image in the sequence
-returns: list of colors
+@param 
+    file: file to image
+    number: the number of the image in the sequence
+@returns
+    list of colors
 '''
 def detectColors(file, number):
     image = cv2.imread(file)
@@ -120,6 +122,10 @@ def detectColors(file, number):
 
 '''
 Converts cube state list into kociemba format string
+@params
+    cube_state_list: list of cube colors for each face
+@return
+    kociemba string
 '''
 def getKociembaString(cube_state_list):
     kociemba_string = ""
@@ -146,9 +152,9 @@ def main():
             img_number += 1
     kociemba_string = getKociembaString(cube_state)
     
-    key = cv2.waitKey() & 0xFF
-    if key == ord('q'):
-        cv2.destroyAllWindows()
+    # key = cv2.waitKey() & 0xFF
+    # if key == ord('q'):
+    #     cv2.destroyAllWindows()
     if (len(kociemba_string) != 54):
         print("Incorrect length for Kociemba input")
     print(kc.solve('RRBBUFBFBRLRRRFRDDURUBFBBRFLUDUDFLLFFLLLLDFBDDDUUBDLUU'))
